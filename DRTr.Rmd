@@ -1,0 +1,181 @@
+---
+title: "DRTr"
+author: '[Spencer Castro](http://spencercastro.com), University of Utah'
+date: "`r format(Sys.time(), '%a %b %d %Y')`"
+output:
+ html_document:
+   code_folding: hide
+   fig_height: 4
+   highlight: pygments
+   theme: yeti
+   toc: yes
+   toc_float: yes
+always_allow_html: yes
+runtime: shiny
+---
+
+Here's a test of an output report for the kind of information you might want immediately available from DRT output.
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require(kableExtra)
+require(tidyverse)
+load("SATdata.Rdata")
+dat <- drt.clean 
+```
+
+## Observations per Cell of the Design per Person
+
+```{r obs}
+kable(table(dat$condition,dat$subid)) %>%
+  kable_styling(bootstrap_options = "striped", full_width = T)
+
+```
+
+
+
+## Minimum and Maximum
+
+```{r glimpse}
+kable(data.frame(rbind(t(apply(dat, 2, min)),
+      t(apply(dat, 2, max)))))  %>%
+  kable_styling(bootstrap_options = "striped", full_width = T)
+
+```
+
+## Hits and Misses by Condition
+
+```{r hit_miss}
+kable(table(dat$response,dat$condition))%>%
+  kable_styling(bootstrap_options = "striped", full_width = T)
+
+
+```
+
+
+##Distributions
+
+```{r, echo=FALSE}
+
+shinyApp(
+
+  ui = fluidPage(
+    selectInput("RT", "Subject:",
+                choices = as.character(levels(dat$subid))),
+    plotOutput("rtPlot")
+  ),
+
+  server = function(input, output) {
+    data <- reactive({dat %>%
+  filter(subid == input) %>%
+  na.omit()})
+    output$rtPlot = renderPlot({
+       ggplot(data(), aes(x = rt)) + geom_histogram(data = data(), aes(x = dat$rt, y=..density.., fill = dat$condition), alpha = .5)+ 
+        ylab("Frequency")+ xlab("Reaction Time") + theme_classic()
+    })
+  },
+
+  options = list(height = 500)
+)
+```
+
+
+## Testing
+
+```{r dists, echo=FALSE}
+    id <- sample(0:1, 100, replace=T)
+val <- sample(seq(1:25), 100, replace=T)
+val2 <- sample(seq(1:10), 100, replace=T)
+
+data <- data.frame(id, val, val2)
+
+shinyApp(
+  
+  
+ui = fluidPage( titlePanel("why u no color?"),
+                sidebarLayout(sidebarPanel(
+                  selectInput("feature", "Feature:",
+                    choices=colnames(data),
+                    selected='val'),
+        hr(),
+        helpText("Select a feature to compare"),
+
+        sliderInput("binSize",
+                    "Size of Bins",
+                    min = 1,
+                    max = 10,
+                    value = 2)
+    ),
+
+    mainPanel(
+      plotOutput("featurePlot")
+    )
+  )
+),
+
+# Define a server for the Shiny app
+server = function(input, output) {
+
+  # Fill in the spot we created for a plot
+  output$featurePlot <- renderPlot({
+
+    # Render histogram
+
+    # Note to readers, the outcome is the same whether the fill command
+    # is as written, or written as: fill=as.factor(id)
+
+    p <- ggplot(data, aes_string(x=input$feature, fill=as.factor(data$id))) +
+        geom_histogram(alpha=0.5, aes(y=..density..), position='identity', binwidth = input$binSize);
+    print(p)
+  })
+}
+)
+
+
+
+```
+
+
+##Clusters
+
+
+```{r kmeans, echo=FALSE}
+shinyApp(
+
+  ui <- fluidPage(
+  headerPanel('Iris k-means clustering'), #This is the title
+  sidebarPanel( #This is the sidebar with buttons:
+    selectInput('xcol', 'X Variable', names(iris)), #xcol is the value, X Variable the label
+    selectInput('ycol', 'Y Variable', names(iris), #ycol is the value, Y Variable the label
+      selected = names(iris)[[2]]),
+    numericInput('clusters', 'Cluster count', 3,
+      min = 1, max = 9)
+  ),
+  mainPanel(
+    plotOutput('plot1')
+  )
+  ),
+  
+server <- function(input, output) {
+
+  selectedData <- reactive({ #We'll talk about reactives in a bit
+    iris[, c(input$xcol, input$ycol)]
+  })
+
+  clusters <- reactive({
+    kmeans(selectedData(), input$clusters)
+  })
+
+  output$plot1 <- renderPlot({ #This creates the plot that you want to see
+    #with dynamic changes
+    par(mar = c(5.1, 4.1, 0, 1)) #this creates the window position
+    plot(selectedData(), #The we plot the clusters from above with selectedData()
+         col = clusters()$cluster, #How many clusters
+         pch = 20, cex = 3) #Color and size default
+    points(clusters()$centers, pch = 4, cex = 4, lwd = 4)
+  })
+
+})
+```
+
+
+
