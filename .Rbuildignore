@@ -1,0 +1,7 @@
+^\.Rproj$
+^\.Rproj\.user$
+^.*\.Rproj$
+^packrat/
+^\.Rprofile$
+^DRTr.Rmd$
+^SATdata.Rdata$

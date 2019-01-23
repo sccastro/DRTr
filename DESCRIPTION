@@ -1,0 +1,30 @@
+Package: DRTr
+Title: Reading, Analyzing, and Visualizing Detection Response Task Output Files
+Version: 0.0.0.9000
+Authors@R: c(
+  person("Spencer", "Castro", , "cac200222@gmail.com", c("aut", "cre")),
+  person("Joel", "Cooper", , "joel.cpr@gmail.com", c("aut"))
+  )
+Description: Collection of functions for reading, analyzing, and visualizing Reaction Time
+    and Hit Rate data from Detection Response Tasks. It implements previous R
+    packages to power simple processing of multiple file formats (i.e. .txt,
+    .csv) into a readable data frame, summary statistics, and standard
+    visualizations for Reaction Time, Hit Rate, Speed-Accuracy Tradeoff, A prime,
+    and others. It seemlessly integrates with science measurement hardware
+    such as the Red Scientific Detection Response Task.
+Depends:
+    R (>= 3.4.0)
+Imports:
+    utils,
+    tidyverse
+Suggests:
+    knitr (>= 1.7),
+    rmarkdown,
+    rstudioapi (>= 0.5),
+    devtools
+License: MIT + file LICENSE
+SystemRequirements: pandoc with https support
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 6.1.1
+
