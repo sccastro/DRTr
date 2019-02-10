@@ -16,7 +16,9 @@ Depends:
     R (>= 3.4.0)
 Imports:
     utils,
-    tidyverse
+    dplyr,
+    magrittr,
+    stringr
 Suggests:
     knitr (>= 1.7),
     rmarkdown,
