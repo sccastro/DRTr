@@ -2,6 +2,7 @@
 
 export(combineCSV)
 import(dplyr)
+import(readr)
 importFrom(magrittr,"%>%")
 importFrom(stringr,str_c)
 importFrom(stringr,str_split)
