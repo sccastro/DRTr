@@ -30,7 +30,7 @@ combineCSV <- function(fpath){ #see the r base cheatsheet for function syntax
   fls <- lapply(str_c(fpath, f), read.csv, header = FALSE) #see ?str_c from stringr and ?lapply from the apply family
 
   #convert list to data frame
-  d <- as.data.frame(bind_rows(fls, fill = TRUE, idcol = TRUE)) #see ?rbind_list from the data.table package
+  d <- as.data.frame(rbind_list(fls, fill = TRUE, idcol = TRUE)) #see ?rbind_list from the data.table package
 
   #join data with identifying information
   e <- f_split %>% #Join df of names and ids with df of data
