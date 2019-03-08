@@ -37,7 +37,7 @@ newdf <- nameCheck(df, "V1",c("V3","V4"), "X1","X3","X4",mics = NULL,"X7","X19")
 
 
 
-Then, visualize the data utilizing a <code>viz</code> functions.
+Then, visualize the data utilizing the <code>viz</code> functions.
 
 ```{r viz, message=FALSE}
 
