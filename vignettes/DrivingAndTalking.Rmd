@@ -16,15 +16,46 @@ knitr::opts_chunk$set(
 )
 ```
 
-This vignette explains how to process your output files from a Detection Response Task. 
+This vignette explains how to process your output files from a Detection Response Task. First, use one of the <code>combine</code> functions to combine your input files into one csv with information from the name of the files appended to the data frame as columns. For example, in this vignette we have eight <code>.txt</code> files with information in the names of the files separated by an underscore (_). Because our <code>.Rmd</code> file is in the same directory, we can use <code>getwd()</code> to specify our working directory as the <code>fpath</code>, or filepath. <code>.Rmd</code> and <code>.R</code> files are filtered out automatically, allowing just your <code>.txt</code>, <code>.csv</code>, or other separated value files to be combined. 
 
-```{r, message = FALSE}
+```{r combine, message = FALSE}
 library(DRTr)
-getwd()
-combineCSV(fpath = getwd())
+
+combineCSV(fpath = getwd(), dataname = df)
+
+head(df)
+```
+
+Now there should be an object under **Data** in your Global Environment with the <code>dataname</code> that you specified. However, that dataset is probably pretty messy. There are probably some columns that you don't need, and none of them have names. That's ok, you can use <code>nameCheck</code> to simultaneously get the columns you're most interested in with appropriate names.
+
+```{r nameCheck, message=FALSE}
+
+newdf <- nameCheck(df, "V1",c("V3","V4"), "X1","X3","X4",mics = NULL,"X7","X19") #Have to fix having 1 or more condition columns
 
 
 ```
+
+
+
+Then, visualize the data utilizing a <code>viz</code> functions.
+
+```{r viz, message=FALSE}
+
+vizBySubject(newdf,plottype = "bar",subid = "subid",cond = "cond", DV= "rt")
+
+
+```
+
+Finally, you can perform summaries or statistics on your dataset with some helpful <code>compare</code> functions.
+
+```{r compare, message=FALSE}
+
+1+1
+
+```
+
+
+
 Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
 
 - Never uses retina figures

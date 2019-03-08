@@ -4,12 +4,14 @@
 \alias{combineCSV}
 \title{Combine .csv Files}
 \usage{
-combineCSV(fpath, dataname = NULL)
+combineCSV(fpath, dataname = NULL, headers = F)
 }
 \arguments{
 \item{fpath}{The direcotry that contains all of the .csv files to be combined.}
 
 \item{dataname}{The name you would like the combined .csv output data.frame to have.}
+
+\item{headers}{Default value is FALSE. If you have column names, or Headers on each of your files, set to TRUE.}
 }
 \description{
 Use this function to read in a series of .csv files and transform them into one data.frame. Make sure to save the output to a data.frame. See Examples for more.

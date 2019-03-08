@@ -19,7 +19,8 @@ Imports:
     dplyr,
     magrittr,
     stringr,
-    readr
+    readr,
+    ggplot2
 Suggests:
     knitr (>= 1.7),
     rmarkdown,
